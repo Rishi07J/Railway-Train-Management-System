@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="user.css">
+</head>
+<body>
+    <h2>Welcome to User Dashboard</h2>
+    <div class="container">
+        <h3>All Trains</h3>
+        <table id="train-table">
+            <thead>
+                <tr>
+                    <th>Train Name</th>
+                    <th>Source</th>
+                    <th>Destination</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Time</th>
+                </tr>
+            </thead>
+            <tbody id="train-list"></tbody>
+        </table>
+    </div>
+    <a href="/">Logout</a>
+
+    <script>
+    
+        function showAllTrains() {
+            fetch("/all-trains")
+                .then(response => response.json())
+                .then(data => {
+                    const trainList = document.getElementById("train-list");
+                    trainList.innerHTML = "";
+
+                    data.forEach(train => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${train.train_name}</td>
+                            <td>${train.source_station}</td>
+                            <td>${train.destination_station}</td>
+                            <td>${train.departure_time}</td>
+                            <td>${train.arrival_time}</td>
+                        `;
+                        trainList.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Failed to fetch trains");
+                });
+        }
+
+       
+        showAllTrains();
+    </script>
+</body>
+</html>

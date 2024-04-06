@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show All Trains</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h2>Show All Trains</h2>
+    <table id="train-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Train Name</th>
+                <th>Source Station</th>
+                <th>Destination Station</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+            </tr>
+        </thead>
+        <tbody id="train-list"></tbody>
+    </table>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("/all-trains")
+                .then(response => response.json())
+                .then(data => {
+                    const trainList = document.getElementById("train-list");
+                    trainList.innerHTML = ""; 
+
+                    data.forEach(train => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${train.id}</td>
+                            <td>${train.train_name}</td>
+                            <td>${train.source_station}</td>
+                            <td>${train.destination_station}</td>
+                            <td>${train.departure_time}</td>
+                            <td>${train.arrival_time}</td>
+                        `;
+                        trainList.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Failed to fetch trains");
+                });
+        });
+    </script>
+</body>
+</html>
